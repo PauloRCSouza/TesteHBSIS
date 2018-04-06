@@ -69,8 +69,8 @@ export class Books extends React.Component<RouteComponentProps<{}>, BookState>{
                     <th>Title</th>
                     <th>Year</th>
                     <th>Author</th>
-                    <th>Editor</th>
                     <th>Edition</th>
+                    <th>Editor</th>
                     <th>ISBN</th>
                 </tr>
             </thead>
@@ -131,7 +131,7 @@ export class Books extends React.Component<RouteComponentProps<{}>, BookState>{
     }
 
     handleDelete(id: number) {
-        if (!confirm('Deseja realmente excluir o registro ?'))
+        if (!confirm('Deseja excluir o registro?'))
             return
         fetch('api/Book/Delete' + id, { method: 'delete' })
             .then(data => {
