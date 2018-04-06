@@ -17,7 +17,7 @@ namespace Business
 
         public Book GetById(int id)
         {
-            throw new System.NotImplementedException();
+            return _rep.GetById(id);
         }
 
         public IQueryable<Book> GetList()
@@ -27,17 +27,17 @@ namespace Business
 
         public dynamic Insert(Book entity)
         {
-            throw new System.NotImplementedException();
+            return _rep.Insert(entity);
         }
 
         public bool Update(Book entity)
         {
-            throw new System.NotImplementedException();
+            return _rep.Update(entity);
         }
 
         public bool Delete(Book entity)
         {
-            throw new System.NotImplementedException();
+            return _rep.Delete(entity);
         }
     }
 }
