@@ -56,7 +56,7 @@
       <Project>{859B1AEC-81F9-47DB-9A8D-11A644A95CED}</Project>
       <Name>Contract</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Entities\Model.csproj">
+    <ProjectReference Include="..\Model\Model.csproj">
       <Project>{29b9709b-64b2-4d67-944c-f54d320e9a3a}</Project>
       <Name>Model</Name>
     </ProjectReference>

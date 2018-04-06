@@ -21,7 +21,7 @@ export class Books extends React.Component<RouteComponentProps<{}>, BookState>{
 
     //#region Constructor
 
-    constructor(props) {
+    constructor(props: any) {
         super(props);
         this.state = {
             book: [],

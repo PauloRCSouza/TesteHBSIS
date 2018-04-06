@@ -10,28 +10,28 @@ interface CreateEditState {
 interface CreateEditProps {
     id: number
     dbaction: string
-    onSave?: any
+    onSave: any
 }
 
 export class CreateEdit extends React.Component<CreateEditProps, CreateEditState> {
-    constructor(props){
+    constructor(props: any){
    super(props);
-    if (this.props.dbaction == "edit") {
-        this.state = { book: null, loading: true, save: false }
-			fetch('api/Bookk/' + this.props.id, {method: 'get' })
+        if (this.props.dbaction == "edit") {
+            this.state = { book: new Book(), loading: true, save: false }
+			fetch('api/Book/' + this.props.id, {method: 'get' })
                 .then(response => response.json() as Promise<Book>)
                 .then(data => {
             this.setState({ book: data, loading: false });
         });
         } else
-			this.state = {book: null, loading: false, save: false}
+            this.state = { book: new Book(), loading: false, save: false}
 
     }
 
-    handleSave(e) {
+    handleSave(e: any) {
         e.preventDefault()
         let method: string = (this.props.dbaction == "edit" ? "Update" : "Insert")
-        let form: Element = document.querySelector('#frmCreateEdit')
+        let form = document.querySelector('#frmCreateEdit') as Element
         let id = document.getElementById('Id') as HTMLInputElement
         fetch('api/Book/' + method,
             {
@@ -69,7 +69,7 @@ export class CreateEdit extends React.Component<CreateEditProps, CreateEditState
             </form>
     }
 
-    formToJson = elements => [].reduce.call(elements, (data, element) => {
+    formToJson = elements => [].reduce.call(elements, (data:any, element:any) => {
         console.log('formToJson()', element)
         
             data[element.name] = element.value;
