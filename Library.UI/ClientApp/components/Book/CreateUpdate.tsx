@@ -1,30 +1,30 @@
 ﻿import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
-import { Book } from '../../Model/book'
+import * as Book from '../Book/model/book'
 
-interface CreateEditState {
-    book: Book;
+interface CreateUpdateState {
+    book: Book.Book;
     loading: boolean;
     save: boolean
 }
-interface CreateEditProps {
+interface CreateUpdateProps {
     id: number
     dbaction: string
     onSave: any
 }
 
-export class CreateEdit extends React.Component<CreateEditProps, CreateEditState> {
-    constructor(props: any){
+export class CreateUpdate extends React.Component<CreateUpdateProps, CreateUpdateState> {
+   constructor(props: any){
    super(props);
         if (this.props.dbaction == "edit") {
-            this.state = { book: new Book(), loading: true, save: false }
-			fetch('api/Book/' + this.props.id, {method: 'get' })
-                .then(response => response.json() as Promise<Book>)
+            this.state = { book: new Book.Book(), loading: true, save: false }
+			fetch('api/BookController/' + this.props.id, {method: 'get' })
+                .then(response => response.json() as Promise<Book.Book>)
                 .then(data => {
             this.setState({ book: data, loading: false });
         });
         } else
-            this.state = { book: new Book(), loading: false, save: false}
+            this.state = { book: new Book.Book(), loading: false, save: false}
 
     }
 
@@ -33,7 +33,7 @@ export class CreateEdit extends React.Component<CreateEditProps, CreateEditState
         let method: string = (this.props.dbaction == "edit" ? "Update" : "Insert")
         let form = document.querySelector('#frmCreateEdit') as Element
         let id = document.getElementById('Id') as HTMLInputElement
-        fetch('api/Book/' + method,
+        fetch('api/BookController/' + method,
             {
                 method: method,
                 headers: { 'Content-Type': 'application/json' },
@@ -56,16 +56,22 @@ export class CreateEdit extends React.Component<CreateEditProps, CreateEditState
 
     private renderForm(item: Book) {
         if (this.props.dbaction != "edit")
-            item = new Book()
-        return <form id='frmCreateEdit'>
+            item = new Book.Book()
+        return <form id='frmCreateUpdate'>
             <label>Id</label>
             <input id='Id' name='Id' type='number' />
-            <label>Title</label>
+            <label>Ano</label>
+            <input id='Year' name='Year' type='number' />
+            <label>Titulo</label>
             <input id='Title' name='Title' type='text' defaultValue={item.title != null ? (item.title + '') : ''} />
-            <label>Author</label>
+            <label>Autor</label>
             <input id='Author' name='Author' type='text' defaultValue={item.author != null ? (item.author + '') : ''} />
-            <label>Numero de Paginas</label>
-            <input id='NumPag' name='NumPag' type='number'  />
+            <label>Edição</label>
+            <input id='Edition' name='Edition' type='text' />
+            <label>Editora</label>
+            <input id='Editor' name='Editor' type='text' />
+            <label>ISBN</label>
+            <input id='ISBN' name='ISBN' type='text' />
             </form>
     }
 

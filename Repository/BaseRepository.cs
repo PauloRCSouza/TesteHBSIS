@@ -7,11 +7,12 @@ namespace Repository
 {
     public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
     {
-        public virtual bool Delete(TEntity entity)
+        public virtual bool Delete(int id)
         {
             using (var conn = DbConfig.GetSqlConnection())
             {
-                return conn.Delete(entity);
+                var e = conn.Get<TEntity>(id);
+                return conn.Delete(e);
             }
         }
 

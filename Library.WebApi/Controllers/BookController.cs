@@ -18,34 +18,37 @@ namespace Library.Web.Api.Controllers
 
         // GET api/values
         [HttpGet("[action]")]
-        public IQueryable<Book> Get()
+        public IQueryable<Book> GetList()
         {
             return _bus.GetList();
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public Book Get(int id)
         {
-            return "value";
+            return _bus.GetById(id);
         }
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody]string value)
+        public void Post([FromBody]Book value)
         {
+            _bus.Insert(value);
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public void Put(int id, [FromBody]Book value)
         {
+            _bus.Update(value);
         }
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            _bus.Delete(id);
         }
     }
 }

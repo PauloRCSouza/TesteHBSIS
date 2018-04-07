@@ -13,6 +13,6 @@ namespace Contract
 
         dynamic Insert(TEntity entity);
 
-        bool Delete(TEntity entity);
+        bool Delete(int id);
     }
 }

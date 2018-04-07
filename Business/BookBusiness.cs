@@ -35,9 +35,9 @@ namespace Business
             return _rep.Update(entity);
         }
 
-        public bool Delete(Book entity)
+        public bool Delete(int id)
         {
-            return _rep.Delete(entity);
+            return _rep.Delete(id);
         }
     }
 }

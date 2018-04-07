@@ -18,7 +18,7 @@ namespace Contract
 
         dynamic Insert(Book entity);
 
-        bool Delete(Book entity);
+        bool Delete(int id);
 
     }
 }
