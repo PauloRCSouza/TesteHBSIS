@@ -1,30 +1,27 @@
 import * as React from 'react';
-import * as Modal from 'react-modal';
+import { render } from 'react-dom';
+//import * as Modal from 'react-modal';
 import { RouteComponentProps } from 'react-router';
-import 'isomorphic-fetch';
+import 'isomorphic-fetch';  
 import * as Book from '../Book/model/book';
-import { CreateUpdate } from 'ClientApp/components/Book/CreateUpdate';
+//import { CreateUpdate } from './CreateUpdate';
 
 interface GridState {
     books: Book.Book[];
+    book: Book.Book;
     loading: boolean;
-    modalState: ModalState,
-    activeId: number
+    activeId: number;
+    onSave?: any;
 }
 
-enum ModalState {
-    create = 1,
-    edit = 2,
-    noModal = 3
-}
 
 export class GridBooks extends React.Component<RouteComponentProps<{}>, GridState> {
     constructor(props: any) {
         super(props);
-        this.state = { books: [], loading: true, modalState: ModalState.noModal,activeId: 0};
+        this.state = { books: [],book:new Book.Book, loading: true,activeId: 0};
 
         fetch('api/BookController/GetList')
-            .then(response => response.json() as Promise<Book.Book[]>)
+            .then(response => response.json() as Promise<Book.Book[]>,null)
             .then(data => {
                 this.setState({ books: data, loading: false });
             });
@@ -33,15 +30,29 @@ export class GridBooks extends React.Component<RouteComponentProps<{}>, GridStat
     public render() {
         let contents = this.state.loading
             ? <p><em>Loading...</em></p>
-            : GridBooks.renderBookTable(this.state.books);
+            : this.renderBookTable(this.state.books);
 
         return <div>
             <h1>Consulta de Livros</h1>
-            {contents}
+            <form id='frmCreateUpdate'>
+                <label>Titulo</label>
+                <input key='Title' />
+                <label>Autor</label>
+                <input key='Author'/>
+                <label>Edicao</label>
+                <input key="Edition" />
+                <label>Editora</label>
+                <input key='Editor'/>
+                <label>ISBN</label>
+                <input key='ISBN'/>
+                <button className="action" onClick={this.handleSave.bind(this)}>Salvar</button>
+                {contents}
+            </form>
+            
         </div>;
     }
 
-    private static renderBookTable(books: Book.Book[]) {
+    private renderBookTable(books: Book.Book[]) {
         return <table className='table'>
             <thead>
                 <tr>
@@ -66,7 +77,7 @@ export class GridBooks extends React.Component<RouteComponentProps<{}>, GridStat
                         <td>{item.title}</td>
                         <td>{item.year}</td>
                         <td>{item.author}</td>
-                        <td>{item.editon}</td>
+                        <td>{item.edition}</td>
                         <td>{item.editor}</td>
                         <td>{item.isbn}</td>
                     </tr>
@@ -75,37 +86,33 @@ export class GridBooks extends React.Component<RouteComponentProps<{}>, GridStat
         </table>;
     }
 
-    private renderPopup() {
-        if (this.state.modalState == ModalState.noModal)
-            return null
-        return <Modal>
-            <button onClick={this.closeModal.bind(this)} className="action" title="Close"></button>
-            {this.renderPopupContent()}
-        </Modal>
-    }
-
-    private renderPopupContent() {
-        switch (this.state.modalState) {
-            case ModalState.create:
-                return <CreateUpdate id={null} dbaction="create"
-                    onSave={this.handlePopupSave.bind(this)} />
-            case ModalState.edit:
-                return <CreateUpdate id={this.state.activeId} dbaction="edit"
-                    onSave={this.handlePopupSave.bind(this)} />
-        }
-    }
+    //private renderFormContent() {
+    //    switch (this.state.modalState) {
+    //        case ModalState.create:
+    //            return <CreateUpdate id={null} dbaction="create"
+    //                onSave={this.handleSave.bind(this)} />
+    //        case ModalState.edit:
+    //            return <CreateUpdate id={this.state.activeId} dbaction="edit"
+    //                onSave={this.handleSave.bind(this)} />
+    //    }
+    //}
 
     //#endregion
 
 
     //#region Handlers
 
+
     handleCreate() {
-        this.setState({ modalState: ModalState.create })
+        this.setState({ })
     }
 
     handleEdit(id: number) {
-        this.setState({ modalState: ModalState.edit })
+        fetch('api/BookController/GetList'+id)
+            .then(response => response.json() as Promise<Book.Book>, null)
+            .then(data => {
+                this.setState({  book: data, loading: false,activeId: 0 });
+            });
     }
 
     handleDelete(id: number) {
@@ -115,20 +122,38 @@ export class GridBooks extends React.Component<RouteComponentProps<{}>, GridStat
             .then(data => {
                 this.setState(
                     {
-                        book: this.state.books.filter((rec) => {
-                            return (rec.id != id);
+                        books: this.state.books.filter((ret) => {
+                            return (ret.id != id);
                         })
                     });
             });
     }
 
-    closeModal() {
-        this.setState({ modalState: ModalState.noModal });
+    //closeModal() {
+    //    this.setState({ modalState: ModalState.noModal });
+    //}
+
+    handleSave(e: Book.Book) {
+        let method: string = (e.id == 0 ? "Update" : "Insert")
+        let form = document.querySelector('#frmCreateUpdate') as Element
+        let id = document.getElementById('Id') as HTMLInputElement
+        fetch('api/BookController/' + method,
+            {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(this.formToJson(form))
+            }).then(data => {
+                this.setState({ onSave: false });
+                this.state.onSave(true);
+            });
     }
 
-    handlePopupSave(success: boolean) {
-        if (success)
-            this.setState({ modalState: ModalState.noModal });
-    }
+    formToJson = elements => [].reduce.call(elements, (data, element) => {
+        console.log('formToJson()', element)
+
+        data[element.name] = element.value;
+
+        return data;
+    }, {});
 
 }

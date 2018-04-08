@@ -22,7 +22,7 @@ namespace Business
 
         public IQueryable<Book> GetList()
         {
-            return _rep.GetList();
+            return _rep.GetList().OrderBy(x => x.Title);
         }
 
         public dynamic Insert(Book entity)

@@ -17,7 +17,7 @@ namespace Library.Web.Api.Controllers
         }
 
         // GET api/values
-        [HttpGet]
+        [HttpGet("GetList")]
         public IQueryable<Book> GetList()
         {
             return _bus.GetList();
@@ -32,14 +32,14 @@ namespace Library.Web.Api.Controllers
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody]Book value)
+        public void Insert([FromBody]Book value)
         {
             _bus.Insert(value);
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]Book value)
+        public void Update([FromBody]Book value)
         {
             _bus.Update(value);
         }

@@ -11,21 +11,19 @@ namespace Model.Config
 {
     public class DbConfig
     {
-        private static string connectionString = ConfigurationManager.ConnectionStrings["DapperSampleConnection"].ToString();
+        //private static string connectionString = ConfigurationManager.ConnectionStrings["DapperSampleConnection"].ToString();
 
-        private static SqlConnection sqlConnection = new SqlConnection(connectionString);
+        static string cs = "Data Source = LOCALHOST\\SQLEXPRESS; Initial Catalog = Entities.LibraryEntities;user id = teste; password = teste;Integrated Security=False";
 
-        static public SqlConnection GetSqlConnection()
+        //private static SqlConnection sqlConnection = new SqlConnection("Data Source = LOCALHOST\\SQLEXPRESS; Initial Catalog = Teste_PauloSouza;Integrated Security=True;");
+
+
+        static public SqlConnection GetSqlConnection
         {
-            sqlConnection.Open();
-
-            return sqlConnection;
-        }
-
-
-        public void DropSqlConnection()
-        {
-            sqlConnection.Close();
+            get {
+                var conn = new SqlConnection(cs);
+                return conn;
+            }
         }
 
     }

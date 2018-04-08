@@ -1,5 +1,6 @@
 using Business;
 using Contract;
+using Library.Web.Api.Controllers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.Webpack;
@@ -23,6 +24,7 @@ namespace Library.Web.App
         {
             services.AddTransient<IBookRepository, BookRepository>();
             services.AddTransient<IBookBusiness, BookBusiness>();
+            //services.AddTransient(BookController);
             services.AddMvc();
         }
 

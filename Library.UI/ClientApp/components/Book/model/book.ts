@@ -3,7 +3,7 @@
     year: number;
     author: string;
     editor: string;
-    editon: string;
+    edition: string;
     title: string;
     isbn: string;
 }
